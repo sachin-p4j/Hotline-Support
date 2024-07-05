@@ -25,7 +25,7 @@
 
             // Send data to Google Sheets
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "https://script.google.com/macros/s/AKfycbzoheubElFSd76uZDfn6gqhDRmT2m2JEk8PSTTIJUe5YE1TQDvT3xrdYCc1zyzRe2pH/exec");
+            xhr.open("POST", "https://script.google.com/macros/s/AKfycby2hbkxpgIJPXCeHqvWLV1OL2H-Cng6-8j1MK31eMedcyFlR9dRAZtXU4JgX7Dephnn/exec");
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
