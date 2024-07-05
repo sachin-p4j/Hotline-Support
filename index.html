@@ -6,17 +6,14 @@
     <title>Hotline-Support</title>
     <script>
         function redirectToTeams(event) {
-            event.preventDefault(); // Prevent the form from submitting the default way
+            event.preventDefault();
 
-            // Check if all required fields are filled
             var form = document.getElementById('customForm');
             if (form.checkValidity() === false) {
-                // Display an error message if form is not valid
                 alert("Please fill in all required fields.");
                 return;
             }
 
-            // Capture the form data
             var formData = new FormData(form);
             var data = {};
             formData.forEach((value, key) => {
@@ -25,18 +22,14 @@
 
             console.log("Form Data: ", data);
 
-            // Send data to Google Sheets
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "https://script.google.com/macros/s/AKfycbyyOTFjeDB-fF52CPPdnjdOwmpxIHHSAeHvH5MP4xaoNTCkEgG4p9fjtIqM4YLIzDrR/exec");
+            xhr.open("POST", "https://script.google.com/macros/s/AKfycbwUTH3isKKlNjS8CdFZX_aCsNWgAgKr-WhxIPoA0rhFlaT8sq8oczBG97N3azxy3TKj/exec");
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Handle the response
                     console.log("XHR Response: ", xhr.responseText);
-                    // Redirect to the Microsoft Teams meeting
                     window.location.href = 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzgxMTI2MmUtOWQxNC00MjM2LWFlNTctYjA4OGY4ZjhhYjk5%40thread.v2/0?context=%7b%22Tid%22%3a%22f253c15b-af3c-46d8-9105-30b27aaf37b9%22%2c%22Oid%22%3a%2235b5526c-4445-495e-8d8e-9205929f81b6%22%7d';
                 } else if (xhr.readyState === 4) {
-                    // Handle error
                     console.error("XHR Error: ", xhr.statusText);
                     alert("Error: " + xhr.statusText);
                 }
