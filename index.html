@@ -16,15 +16,27 @@
                 return;
             }
 
-            // Capture the form data if needed
+            // Capture the form data
             var formData = new FormData(form);
+            var data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
 
-            // Perform any actions with the form data here
-            // For example, you could send it to a server using AJAX
-            // In this example, we're skipping this step and redirecting immediately
-
-            // Redirect to the Microsoft Teams meeting
-            window.location.href = 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzgxMTI2MmUtOWQxNC00MjM2LWFlNTctYjA4OGY4ZjhhYjk5%40thread.v2/0?context=%7b%22Tid%22%3a%22f253c15b-af3c-46d8-9105-30b27aaf37b9%22%2c%22Oid%22%3a%2235b5526c-4445-495e-8d8e-9205929f81b6%22%7d';
+            // Send data to Google Sheets
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://script.google.com/macros/s/AKfycbxlwppk07lDUku16kKMduGGz2_gv02PXcgieFyFoJakLvHt1RGdSnGrWmpoBDTVZPCq/exec");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Redirect to the Microsoft Teams meeting
+                    window.location.href = 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzgxMTI2MmUtOWQxNC00MjM2LWFlNTctYjA4OGY4ZjhhYjk5%40thread.v2/0?context=%7b%22Tid%22%3a%22f253c15b-af3c-46d8-9105-30b27aaf37b9%22%2c%22Oid%22%3a%2235b5526c-4445-495e-8d8e-9205929f81b6%22%7d';
+                } else if (xhr.readyState === 4) {
+                    // Handle error
+                    alert("Error: " + xhr.statusText);
+                }
+            };
+            xhr.send(JSON.stringify(data));
         }
 
         function toggleOtherField(event) {
