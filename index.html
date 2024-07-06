@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotline-Support</title>
+    <script>
+        async function redirectToTeams(event) {
+            event.preventDefault(); // Prevent the form from submitting the default way
+
+            // Check if all required fields are filled
+            var form = document.getElementById('customForm');
+            if (form.checkValidity() === false) {
+                // Display an error message if form is not valid
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            // Capture the form data
+            var formData = new FormData(form);
+            var data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Convert form data to JSON
+            var jsonData = JSON.stringify(data);
+
+            // Send data to GitHub repository (using GitHub API to create an issue)
+            var response = await fetch('https://api.github.com/repos/sachin-p4j/Hotline-Support/issues', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: 'New Form Submission',
+                    body: jsonData
+                })
+            });
+
+            if (response.ok) {
+                // Redirect to the Microsoft Teams meeting
+                window.location.href = 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzgxMTI2MmUtOWQxNC00MjM2LWFlNTctYjA4OGY4ZjhhYjk5%40thread.v2/0?context=%7b%22Tid%22%3a%22f253c15b-af3c-46d8-9105-30b27aaf37b9%22%2c%22Oid%22%3a%2235b5526c-4445-495e-8d8e-9205929f81b6%22%7d';
+            } else {
+                alert('Failed to submit the form.');
+            }
+        }
+
+        function toggleOtherField(event) {
+            var otherField = document.getElementById('otherField');
+            var otherText = document.getElementById('otherText');
+            if (event.target.value === 'Other') {
+                otherField.style.display = 'block';
+                otherText.setAttribute('required', 'required');
+            } else {
+                otherField.style.display = 'none';
+                otherText.removeAttribute('required');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Hotline-Support</h1>
+    <form id="customForm" onsubmit="redirectToTeams(event)">
+        <label for="name">Name of Candidate:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email ID:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="date">Date of Issue Reported:</label>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="issueType">Issue Type:</label>
+        <select id="issueType" name="issueType" onchange="toggleOtherField(event)" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="Webcam & Microphone Issue">Webcam & Microphone Issue</option>
+            <option value="Authentication Issue">Authentication Issue</option>
+            <option value="Network & System Issue">Network & System Issue</option>
+            <option value="Internal Server Error">Internal Server Error</option>
+            <option value="Not Received Test Invitation Email">Not Received Test Invitation Email</option>
+            <option value="Other">Other</option>
+        </select><br><br>
+
+        <div id="otherField" style="display: none;">
+            <label for="otherText">Please specify:</label>
+            <input type="text" id="otherText" name="otherText"><br><br>
+        </div>
+
+        <button type="submit">Submit and Join Call</button>
+    </form>
+</body>
+</html>
