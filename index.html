@@ -30,6 +30,7 @@
             var response = await fetch('https://api.github.com/repos/sachin-p4j/Hotline-Support/issues', {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${PAT_GITHUB}`,  // Use the GitHub token stored as a secret
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
