@@ -21,5 +21,3 @@ jobs:
         git add data.csv
         git commit -m "Update data.csv with new form submission"
         git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
