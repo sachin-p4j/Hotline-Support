@@ -11,26 +11,24 @@
             // Check if all required fields are filled
             var form = document.getElementById('customForm');
             if (form.checkValidity() === false) {
-                // Display an error message if form is not valid
                 alert("Please fill in all required fields.");
                 return;
             }
 
-            // Capture the form data
             var formData = new FormData(form);
             var data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
 
-            // Convert form data to JSON
             var jsonData = JSON.stringify(data);
 
-            // Send data to GitHub repository (using GitHub API to create an issue)
+            console.log("Submitting data:", jsonData);
+
             var response = await fetch('https://api.github.com/repos/sachin-p4j/Hotline-Support/issues', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `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`,
+                    'Authorization': 'Bearer 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', // Replace with your actual PAT
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -40,10 +38,12 @@
             });
 
             if (response.ok) {
-                // Redirect to the Microsoft Teams meeting
+                console.log("Form submitted successfully.");
                 window.location.href = 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzgxMTI2MmUtOWQxNC00MjM2LWFlNTctYjA4OGY4ZjhhYjk5%40thread.v2/0?context=%7b%22Tid%22%3a%22f253c15b-af3c-46d8-9105-30b27aaf37b9%22%2c%22Oid%22%3a%2235b5526c-4445-495e-8d8e-9205929f81b6%22%7d';
             } else {
-                alert('Failed to submit the form.');
+                const errorText = await response.text();
+                console.error('Failed to submit the form:', response.status, errorText);
+                alert('Failed to submit the form. See console for details.');
             }
         }
 
