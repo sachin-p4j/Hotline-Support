@@ -23,19 +23,16 @@
                 data[key] = value;
             });
 
-            // Convert form data to JSON
-            var jsonData = JSON.stringify(data);
-
-            // Send data to GitHub repository (using GitHub API to create an issue)
-            var response = await fetch('https://api.github.com/repos/sachin-p4j/Hotline-Support/issues', {
+            // Send form data to the GitHub Actions workflow
+            var response = await fetch('https://api.github.com/repos/sachin-p4j/Hotline-Support/dispatches', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${PAT_GITHUB}`,  // Use the GitHub token stored as a secret
-                    'Content-Type': 'application/json'
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Authorization': `token ${PAT_GITHUB}` // Set your PAT_GITHUB variable here
                 },
                 body: JSON.stringify({
-                    title: 'New Form Submission',
-                    body: jsonData
+                    event_type: 'form_submission',
+                    client_payload: data
                 })
             });
 
