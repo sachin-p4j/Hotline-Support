@@ -1,25 +1,20 @@
-name: Create Issue and Update CSV
+name: Update CSV
 
 on:
-  workflow_dispatch:  # Allows manual triggering
   issues:
     types: [opened]
 
 jobs:
-  create-issue:
+  update-csv:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Create GitHub Issue
+    - name: Update CSV file
       env:
         GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
-      run: |
-        curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/issues -d '{"title":"New Form Submission","body":"'"${{ github.event.issue.body }}"'"}'
-
-    - name: Update CSV file
       run: |
         ISSUE_BODY=$(jq -r '.issue.body' $GITHUB_EVENT_PATH)
         echo "$ISSUE_BODY" >> data.csv
