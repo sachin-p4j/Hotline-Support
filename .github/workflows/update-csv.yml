@@ -12,10 +12,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install jq
-      run: sudo apt-get install jq
-
     - name: Update CSV file
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
       run: |
         ISSUE_BODY=$(jq -r '.issue.body' $GITHUB_EVENT_PATH)
         echo "$ISSUE_BODY" >> data.csv
