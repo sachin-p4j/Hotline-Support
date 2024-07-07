@@ -11,24 +11,26 @@
             // Check if all required fields are filled
             var form = document.getElementById('customForm');
             if (form.checkValidity() === false) {
+                // Display an error message if form is not valid
                 alert("Please fill in all required fields.");
                 return;
             }
 
+            // Capture the form data
             var formData = new FormData(form);
             var data = {};
             formData.forEach((value, key) => {
                 data[key] = value;
             });
 
+            // Convert form data to JSON
             var jsonData = JSON.stringify(data);
 
-            console.log("Submitting data:", jsonData);
-
+            // Send data to GitHub repository (using GitHub API to create an issue)
             var response = await fetch('https://api.github.com/repos/sachin-p4j/Hotline-Support/issues', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer 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', // Replace with your actual PAT
+                    'Authorization': `Bearer ${PAT_GITHUB}`,  // Ensure PAT_GITHUB is set as an environment variable
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -38,12 +40,10 @@
             });
 
             if (response.ok) {
-                console.log("Form submitted successfully.");
+                // Redirect to the Microsoft Teams meeting
                 window.location.href = 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_MzgxMTI2MmUtOWQxNC00MjM2LWFlNTctYjA4OGY4ZjhhYjk5%40thread.v2/0?context=%7b%22Tid%22%3a%22f253c15b-af3c-46d8-9105-30b27aaf37b9%22%2c%22Oid%22%3a%2235b5526c-4445-495e-8d8e-9205929f81b6%22%7d';
             } else {
-                const errorText = await response.text();
-                console.error('Failed to submit the form:', response.status, errorText);
-                alert('Failed to submit the form. See console for details.');
+                alert('Failed to submit the form.');
             }
         }
 
